@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './App.css'
 import Input from './input'
 import axios from 'axios';
@@ -9,6 +9,8 @@ function App() {
 
   const [data, setData] = useState([]);
   const [inputVal, setInputVal] = useState('');
+  const timerId = useRef(null);
+
 
   async function fetchData(url) {
     axios.get(url).then((response) => {
@@ -23,10 +25,11 @@ function App() {
     fetchData("https://fakestoreapi.com/products")
   })
 
-
-
   function onChangeHandler(e) {
-    setTimeout(() => {
+    if (timerId.current) {
+      clearTimeout(timerId.current);
+    } 
+    timerId.current = setTimeout(() => {
       setInputVal(e.target.value);
     }, 1000);
   }
